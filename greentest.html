@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GREEN API Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, textarea {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        button {
+            padding: 10px 20px;
+        }
+        #response {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Тестовое задание GREEN API</h1>
+
+<label for="idInstance">ID инстанса:</label>
+<input type="text" id="idInstance" />
+
+<label for="ApiTokenInstance">API токен:</label>
+<input type="text" id="ApiTokenInstance" />
+
+<button id="getSettings">Получить настройки</button>
+<button id="getStateInstance">Получить состояние</button>
+<button id="sendMessage">Отправить сообщение</button>
+
+<h2>Ответ:</h2>
+<textarea id="response" readonly></textarea>
+
+<script>
+    const apiUrl = 'https://api.green-api.com/'; // Укажите базовый URL для API
+
+    function callApi(method, data) {
+        $.ajax({
+            url: apiUrl + method,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                $('#response').val(JSON.stringify(response, null, 2));
+            },
+            error: function(error) {
+                $('#response').val('Ошибка: ' + JSON.stringify(error, null, 2));
+            }
+        });
+    }
+
+    $('#getSettings').click(function() {
+        const idInstance = $('#idInstance').val();
+        const apiToken = $('#ApiTokenInstance').val();
+        callApi('getSettings', { idInstance, ApiToken: apiToken });
+    });
+
+    $('#getStateInstance').click(function() {
+        const idInstance = $('#idInstance').val();
+        const apiToken = $('#ApiTokenInstance').val();
+        callApi('getStateInstance', { idInstance, ApiToken: apiToken });
+    });
+
+    $('#sendMessage').click(function() {
+        const idInstance = $('#idInstance').val();
+        const apiToken = $('#ApiTokenInstance').val();
+        const message = "Ваше сообщение"; // Здесь можно задать текст сообщения
+        callApi('sendMessage', { idInstance, ApiToken: apiToken, message });
+    });
+</script>
+
+</body>
+</html>
